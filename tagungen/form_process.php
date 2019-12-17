@@ -1,9 +1,33 @@
 <?php 
 
 require_once("config.php");
+
 if((isset($_POST['firstname'])&& $_POST['firstname'] !='') && (isset($_POST['eMail'])&& $_POST['eMail'] !='') && (isset($_POST['g-recaptcha-response'])))
 {
- require_once("contact_mail_tagungen.php");
+
+if (isset($_POST['datealtThun'])) {
+        $datealtThun = $conn->real_escape_string($_POST['datealtThun']);
+} else {
+        $datealtThun = 0;
+}
+if (isset($_POST['datealtWinterthur'])) {
+        $datealtWinterthur = $conn->real_escape_string($_POST['datealtWinterthur']);
+} else {
+        $datealtWinterthur = 0;
+}
+if (isset($_POST['datealtZofingen'])) {
+        $datealtZofingen = $conn->real_escape_string($_POST['datealtZofingen']);
+} else {
+        $datealtZofingen = 0;
+}
+if (!isset($_POST['vegi'])) {
+        $vegi = 0;
+}else {
+        $vegi = $conn->real_escape_string($_POST['vegi']);
+        
+}
+
+        require_once("contact_mail_tagungen.php");
 
 $firstname = $conn->real_escape_string($_POST['firstname']);
 $lastname = $conn->real_escape_string($_POST['lastname']);
@@ -82,7 +106,7 @@ if($verfiedcapcha){
         }
     }}
     else {
-    echo "Captcha nicht gültig";
+    echo "Ich bin kein Roboter wurde nicht aktiviert.";
     }
 }
 else

@@ -182,7 +182,7 @@
               <div id="functionDropDown" class="dropdown-menu btn-form" aria-labelledby="btnGroupDrop1">
                 <a id="Pfarrperson" class="dropdown-item" href="#">Pfarrperson</a>
                 <a id="Laienmitglied" class="dropdown-item" href="#">Laienmitglied</a>
-                <a id="Mitglied Bevo" class="dropdown-item" href="#">Mitglied BeVo</a>
+                <a id="MitgliedBevo" class="dropdown-item" href="#">Mitglied BeVo</a>
               </div>
              </div>
           </div>
@@ -277,7 +277,7 @@
       //$("#language").text(lang);
       $("#detectedLang").val(lang);
 
-      var lang_fr = { mainTitle: "journées d'information et de discussion sur \"l’Avenir EEM\"", subTitle: '', separateForm: 'Veuillez remplir ce formulaire séparément pour chaque personne.', firstname: 'Prénom', lastname: 'Nom', city: 'Domicile', district: 'Paroisse', role: 'Fonction', eMail: 'Adresse électronique', preferedDate: 'date préférée', allsoPossible: "qui pourrait aussi être fait", yes:'végétarien', no: 'Non', lunchInfo: 'Il y a la possibilité de manger soi-même dans les environs. Nous proposons une collation pour le repas de midi contre une participation aux frais (Fr/Euros 10,-)',  submit_form: 'Inscrire', zofingen: "11.1.2020 EMK Zofingen", thun: "25.1.2020 EMK Thoune", winterthur: "25.1.2020 EMK Winterthur", zofingen2: "11.1.2020 EMK Zofingen", thun2: "25.1.2020 EMK Thoune", winterthur2: "25.1.2020 EMK Winterthur", foodConfig: "vœux culinaires", allergies: "allergies" };
+      var lang_fr = {MitgliedBevo: "conseil paroissial", Laienmitglied: "membre de l'association", Pfarrperson: "pasteur", btnDropDown: "fonction", mainTitle: "journées d'information et de discussion sur \"l’Avenir EEM\"", subTitle: '', separateForm: 'Veuillez remplir ce formulaire séparément pour chaque personne.', firstname: 'Prénom', lastname: 'Nom', city: 'Domicile', district: 'Paroisse', role: 'Fonction', eMail: 'Adresse électronique', preferedDate: 'date préférée', allsoPossible: "qui pourrait aussi être fait", yes:'végétarien', no: 'Non', lunchInfo: 'Il y a la possibilité de manger soi-même dans les environs. Nous proposons une collation pour le repas de midi contre une participation aux frais (Fr/Euros 10,-)',  submit_form: 'Inscrire', zofingen: "11.1.2020 EMK Zofingen", thun: "25.1.2020 EMK Thoune", winterthur: "25.1.2020 EMK Winterthur", zofingen2: "11.1.2020 EMK Zofingen", thun2: "25.1.2020 EMK Thoune", winterthur2: "25.1.2020 EMK Winterthur", foodConfig: "vœux culinaires", allergies: "allergies" };
 
       if ( (lang == "fr-FR") || (lang == "fr-CH") || (lang == "fr")) {
         $.each(lang_fr, function(index, value){
