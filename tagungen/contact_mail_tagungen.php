@@ -16,13 +16,15 @@ if ($lang == 'fr' || $lang == 'fr-CH' || $lang == 'fr-FR') {
             $date = "Samedi, 25. Jan. 2020 in Thun";
     }
 } else {
-    switch ($_POST['dateprio']) {
-        case "Thun":
-            $date = "Samstag, 11. Jan. 2020 in Zofingen";
-        case "Winterthur":
-            $date = "Samstag, 25. Jan. 2020 in Winterthur";
-        case "Zofingen":
-            $date = "Samstag, 25. Jan. 2020 in Thun";
+    echo $_POST['dateprio'];
+    if ($_POST['dateprio'] ==  "Thun") {
+        $date = "Samstag, 25. Jan. 2020 in Thun";
+    } elseif ($_POST['dateprio'] ==  "Zofingen") {
+        $date = "Samstag, 11. Jan. 2020 in Zofingen";
+    } elseif ($_POST['dateprio'] ==  "Winterthur") {
+        $date = "Samstag, 25. Jan. 2020 in Winterthur";
+    } else {
+        echo "Ein Fehler beim Versenden des e-Mails ist aufgetreten.";
     }
 }
 
@@ -117,19 +119,19 @@ $header[] = 'MIME-Version: 1.0';
 $header[] = 'Content-type: text/html; charset=utf-8';
 
 // zusätzliche Header
-$header[] = 'To: ' . $_POST["firstname"] . '' . $_POST["your_name"] . '<' . $_POST["your_email"] . '>';
+$header[] = 'To: ' . $_POST["firstname"] . '' . $_POST["lastname"] . '<' . $_POST["eMail"] . '>';
 $header[] = 'From: EMK-Schweiz <noreply@emk-schweiz.ch>';
 
 // verschicke die E-Mail
-//mail($empfaenger, $betreff, $nachricht, implode("\r\n", $header));
+mail($empfaenger, $betreff, $nachricht, implode("\r\n", $header));
 
 
 
 //$toEmail = $_POST["your_email"] ;
 //$mailHeaders = "From: noreply@emk-schweiz.ch <noreply@emk-schweiz.ch>\r\n MIME-Version: 1.0\r\n Content-type: text/html; charset=iso-8859-1";
-if(mail($empfaenger, $betreff, $nachricht, implode("\r\n", $header))) {
-echo "";
-} else {
-echo"E-Mail konnte nicht gesendet werden.";
-}
+//if(mail($empfaenger, $betreff, $nachricht, implode("\r\n", $header))) {
+//echo "";
+//} else {
+//echo"E-Mail konnte nicht gesendet werden.";
+//}
 ?>
