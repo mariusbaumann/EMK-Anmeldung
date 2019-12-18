@@ -117,7 +117,7 @@ $header[] = 'MIME-Version: 1.0';
 $header[] = 'Content-type: text/html; charset=utf-8';
 
 // zusätzliche Header
-$header[] = 'To: ' . $_POST["firstname"] . '' . $_POST["lastname"];
+$header[] = 'To: ' . $_POST["firstname"] . '' . $_POST["your_name"] . '<' . $_POST["your_email"] . '>';
 $header[] = 'From: EMK-Schweiz <noreply@emk-schweiz.ch>';
 
 // verschicke die E-Mail
