@@ -2,6 +2,7 @@
 <html>
 <head>
   <!-- Latest compiled and minified CSS -->
+  <script src="https://kit.fontawesome.com/39876f8fd5.js" crossorigin="anonymous"></script>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> 
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -58,6 +59,7 @@
 <thead>
         <tr>
             <th>Bestätigung</th>
+            <th>Bearbeitung</th>
             <th>Vorname</th>
             <th>Nachname</th>
             <th>Bezrik</th>
@@ -115,24 +117,52 @@
             return (data == 1) ? '<button class="btn btn-small btn-default" disabled><span class="glyphicon glyphicon-ok" ></span> Bestätigt</button>' : '<button class="btn btn-small btn-success" >Bestätigen</button>';}
             //"defaultContent": '<span class="btn btn-small btn-success" >Bestätigen</span>',
           },
+          { data: 'confirmationmail',
+          render: function (data, type, row) {
+            return (data == 1) ? '<button class="btn btn-small btn-default" disabled><span class="glyphicon glyphicon-ok" ></span> Bearbeiten</button>' : '<button class="btn btn-small btn-success" >Bearbeiten</button>';}
+            //"defaultContent": '<span class="btn btn-small btn-success" >Bestätigen</span>',
+          },
           { data: 'firstname' },
           { data: 'lastname' },
           { data: 'district' },
           { data: 'role' },
           { data: 'eMail' },
-          { data: 'dateprioThun' },
-          { data: 'dateprioWintherthur' },
-          { data: 'dateprioZofingen' },
-          { data: 'dateprioThun' },
-          { data: 'datealtThun' },
-          { data: 'datealtWinterthur' },
-          { data: 'datealtZofingen' },
-          { data: 'vegi' },
-          { data: 'allergien' },
-          { data: 'lang',
+          { data: 'dateprioThun',
+            render: function (data, type, row) {
+            return (data == 1) ? '<i class="fas fa-check-circle"></i>' : '<i class="far fa-times-circle"></i>';}
+           },
+          { data: 'dateprioWintherthur', 
+            render: function (data, type, row) {
+            return (data == 1) ? '<i class="fas fa-check-circle"></i>' : '<i class="far fa-times-circle"></i>';}
+          },
+          { data: 'dateprioZofingen',
+            render: function (data, type, row) {
+            return (data == 1) ? '<i class="fas fa-check-circle"></i>' : '<i class="far fa-times-circle"></i>';}
+           },
+          { data: 'datealtThun',
+            render: function (data, type, row) {
+            return (data == 1) ? '<i class="fas fa-check-circle"></i>' : '<i class="far fa-times-circle"></i>';}
+           },
+          { data: 'datealtWinterthur',
+            render: function (data, type, row) {
+            return (data == 1) ? '<i class="fas fa-check-circle"></i>' : '<i class="far fa-times-circle"></i>';}
+           },
+          { data: 'datealtZofingen', 
+            render: function (data, type, row) {
+            return (data == 1) ? '<i class="fas fa-check-circle"></i>' : '<i class="far fa-times-circle"></i>';}
+          },
+          { data: 'vegi',
+            render: function (data, type, row) {
+            return (data == 1) ? '<i class="fas fa-check-circle"></i>' : '<i class="far fa-times-circle"></i>';}
+           },
+          { data: 'allergies' },
+          { data: 'detectedLang',
           render: function (data, type, row) {
             return '<span class="label label-success">'+data+'</span>';}
-          }
+          },
+          { data: 'Status' },
+          { data: 'confAtendenceLocation' },
+          { data: 'timestamp' },
       ]
       
       });

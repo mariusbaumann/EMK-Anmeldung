@@ -28,8 +28,8 @@
       border: none;
       border-radius: 0; 
     }
-    .btn-sucess {
-        background-color: #aed361 !important;
+    .btn-success {
+        background-color: #aed361;
         border: none;
         border-radius: 0; 
       }
@@ -108,4 +108,7 @@
     .alert-success {
       background-color: #aed361;
       font-size: 20px;
+    }
+    input {
+        margin-bottom: 10px;
     }
