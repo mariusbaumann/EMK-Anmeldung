@@ -7,16 +7,16 @@ $lang = $_POST['detectedLang'];
 $betreff = 'EMK-Schweiz: Bestätigung zur Anmeldung';
 
 if ($lang == 'fr' || $lang == 'fr-CH' || $lang == 'fr-FR') {
-    switch ($_POST['dateprio']) {
-        case "Thun":
-            $date = "Samedi, 11. Jan. 2020 in Zofingen";
-        case "Winterthur":
-            $date = "Samedi, 25. Jan. 2020 in Winterthur";
-        case "Zofingen":
-            $date = "Samedi, 25. Jan. 2020 in Thun";
+    if ($_POST['dateprio'] ==  "Thun") {
+        $date = "Samedi, 25. Jan. 2020 in Thune";
+    } elseif ($_POST['dateprio'] ==  "Zofingen") {
+        $date = "Samedi, 11. Jan. 2020 in Zofingen";
+    } elseif ($_POST['dateprio'] ==  "Winterthur") {
+        $date = "Samedi, 25. Jan. 2020 in Winterthur";
+    } else {
+        echo "Ein Fehler beim Versenden des e-Mails ist aufgetreten.";
     }
 } else {
-    echo $_POST['dateprio'];
     if ($_POST['dateprio'] ==  "Thun") {
         $date = "Samstag, 25. Jan. 2020 in Thun";
     } elseif ($_POST['dateprio'] ==  "Zofingen") {
