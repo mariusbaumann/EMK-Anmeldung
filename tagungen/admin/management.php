@@ -5,11 +5,14 @@
   <script src="https://kit.fontawesome.com/39876f8fd5.js" crossorigin="anonymous"></script>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> 
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
  
-  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <link href="https://fonts.googleapis.com/css?family=Roboto+Slab&display=swap" rel="stylesheet">
+  
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
   <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
 
@@ -53,7 +56,53 @@
   </div><!-- /.container-fluid -->
 </nav>
 
+
 <div class="containter-fluid">
+
+<!-- MODAL Bestätigen-->
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#confirmModal">
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Akion wählen</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <div class="row">
+        <div id="prioConfirm" class="col">
+          <p>Priorität bestätigen:</p>
+        </div>
+      </div>
+      <div class="row">
+      <div id="altConfirm" class="col">
+      <p>Umbuchen auf:</p>
+      <!--<button type="button" class="btn btn-primary">xxxx</button>-->
+      
+      </div>
+      </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
 <table id="list_table_json" class="table table-striped table-hover" >
 <div id="loading-img"><img class="img-center" src="Rolling-2s-200px.svg" /></div>
 <thead>
@@ -85,6 +134,9 @@
 <script src="../../jquery.min.js"></script>
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
 <script type="text/javascript" charset="utf8" src=https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js></script>
+
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
   <script>
   
 
@@ -114,12 +166,12 @@
         columns: [
           { data: 'confirmationmail',
           render: function (data, type, row) {
-            return (data == 1) ? '<button class="btn btn-small btn-default" disabled><span class="glyphicon glyphicon-ok" ></span> Bestätigt</button>' : '<button class="btn btn-small btn-success" >Bestätigen</button>';}
+            return (data == 1) ? '<button class="btn btn-small btn-default" disabled><span class="glyphicon glyphicon-ok" ></span> Bestätigt</button>' : '<button class="btn btn-small btn-success confirm" >Bestätigen</button>';}
             //"defaultContent": '<span class="btn btn-small btn-success" >Bestätigen</span>',
           },
           { data: 'confirmationmail',
           render: function (data, type, row) {
-            return (data == 1) ? '<button class="btn btn-small btn-default" disabled><span class="glyphicon glyphicon-ok" ></span> Bearbeiten</button>' : '<button class="btn btn-small btn-success" >Bearbeiten</button>';}
+            return (data == 1) ? '<button class="btn btn-small btn-default" disabled><span class="glyphicon glyphicon-ok" ></span> Bearbeiten</button>' : '<button class="btn btn-small btn-success edit" >Bearbeiten</button>';}
             //"defaultContent": '<span class="btn btn-small btn-success" >Bestätigen</span>',
           },
           { data: 'firstname' },
@@ -156,10 +208,7 @@
             return (data == 1) ? '<i class="fas fa-check-circle"></i>' : '<i class="far fa-times-circle"></i>';}
            },
           { data: 'allergies' },
-          { data: 'detectedLang',
-          render: function (data, type, row) {
-            return '<span class="label label-success">'+data+'</span>';}
-          },
+          { data: 'detectedLang' },
           { data: 'Status' },
           { data: 'confAtendenceLocation' },
           { data: 'timestamp' },
@@ -167,29 +216,54 @@
       
       });
 
-      $('#list_table_json tbody').on( 'click', '.btn-success', function () {
+      $('#list_table_json tbody').on( 'click', '.confirm', function () {
         var data = table.row( $(this).parents('tr') ).data();
         //alert( data["id"] );
-        $(this).replaceWith('<img class="loading-small" src="Rolling-1s-200px.svg" />');
+        
+        if (data['dateprioThun'] == 1) {
+          $("#prioConfirm").append('<button type="button" class="btn btn-primary">Samstag, 25.1.19, Thun</button>');
+        }
+        if (data['dateprioWintherthur'] == 1) {
+          $("#prioConfirm").append('<button type="button" class="btn btn-primary">Samstag, 25.1.19, Winterthur</button>');
+        }
+        if (data['dateprioZofingen'] == 1) {
+          $("#prioConfirm").append('<button type="button" class="btn btn-primary">Samstag, 11.1.19, Zofingen</button>');
+        }
+
+        if (data['datealtThun'] == 1) {
+          $("#altConfirm").append('<button type="button" class="btn btn-primary" data="datealtThun">Samstag, 25.1.19, Thun</button></br>');
+        }
+        if (data['datealtWinterthur'] == 1) {
+          $("#altConfirm").append('<button type="button" class="btn btn-primary" data="datealtWinterthur">Samstag, 25.1.19, Winterthur</button></br>');
+        }
+        if (data['datealtZofingen'] == 1) {
+          $("#altConfirm").append('<button type="button" class="btn btn-primary" data="datealtZofingen">Samstag, 11.1.19, Zofingen</button></br>');
+        }
+        
+        $('#confirmModal').modal('show');
+        
+        //$(this).replaceWith('<img class="loading-small" src="../../Rolling-1s-200px.svg" />');
+
+
 
         $.ajax({
         type: "POST",
-        url: 'exec-confirmationmail.php',
+        url: '',
         data: {id: data['id']},    
         timeout: 5000,
         error: function(jqXHR, textStatus, errorThrown) {
           $('.loading-small').replaceWith('<button class="btn btn-small btn-danger" disabled><span class="glyphicon glyphicon-exclamation-sign" ></span> Fehler</button>');
-          console.log(jqXHR);
-          console.log(textStatus);
-          console.log(errorThrown);
+          //console.log(jqXHR);
+          //console.log(textStatus);
+          //console.log(errorThrown);
         },
         success: function (data){
           if(data == "1"){
-            $('.loading-small').replaceWith('<button class="btn btn-small btn-default" disabled><span class="glyphicon glyphicon-ok" ></span> Bestätigt</button>');
+            //$('.loading-small').replaceWith('<button class="btn btn-small btn-default" disabled><span class="glyphicon glyphicon-ok" ></span> Bestätigt</button>');
           }else{
-            $('.loading-small').replaceWith('<button class="btn btn-small btn-danger" disabled><span class="glyphicon glyphicon-exclamation-sign" ></span> Fehler</button>');
+            //$('.loading-small').replaceWith('<button class="btn btn-small btn-danger" disabled><span class="glyphicon glyphicon-exclamation-sign" ></span> Fehler</button>');
           }
-          console.log(data);
+          //console.log(data);
         } 
       });
 
