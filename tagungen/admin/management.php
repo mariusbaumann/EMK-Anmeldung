@@ -94,15 +94,6 @@
   </div>
 </div>
 
-
-
-
-
-
-
-
-
-
 <table id="list_table_json" class="table table-striped table-hover" >
 <div id="loading-img"><img class="img-center" src="Rolling-2s-200px.svg" /></div>
 <thead>
@@ -138,7 +129,42 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
   <script>
-  
+  function refresh() {
+      
+      $.ajax({
+        url: "serve-table-content.php",
+        dataType: 'json',
+        type: 'get',
+        cache:false,
+        success: function(data){
+          /*console.log(data);*/
+          var event_data = '';
+          var lunchcount = 0;
+          var frcount = 0;
+          var decount = 0;
+          $.each(data, function(index, value){
+              if (value.lunch == true) {
+                  lunchcount++;
+              }
+              if ((value.lang == "de") || (value.lang == "de-CH") || (value.lang == "de-DE")) {
+                decount++;
+              }
+              if ((value.lang == "fr") || (value.lang == "fr-CH") || (value.lang == "fr-FR")) {
+                frcount++;
+              }
+          });
+          $('#peoble-count').text(data.length);
+          $('#lunch-count').text(lunchcount);
+          $('#de-count').text(decount);
+          $('#fr-count').text(frcount);
+        },
+        error: function(d){
+            /*console.log("error");
+            alert("404. Please wait until the File is Loaded.");*/
+            $("#list_table_json").replaceWith('<p>Du bist nicht eingeloggt</p></p><a href="admin.php"><button class="btn btn-primary">Einloggen</button></a>');
+        }
+    });
+  };
 
     $(document).ready(function load(){
 
@@ -164,9 +190,9 @@
             
         } ],
         columns: [
-          { data: 'confirmationmail',
+          { data: 'Status',
           render: function (data, type, row) {
-            return (data == 1) ? '<button class="btn btn-small btn-default" disabled><span class="glyphicon glyphicon-ok" ></span> Bestätigt</button>' : '<button class="btn btn-small btn-success confirm" >Bestätigen</button>';}
+            return (data !== "Neu") ? '<button class="btn btn-small btn-default" disabled><span class="fas fa-check-circle" ></span> Bestätigt</button>' : '<button class="btn btn-small btn-success confirm" >Bestätigen</button>';}
             //"defaultContent": '<span class="btn btn-small btn-success" >Bestätigen</span>',
           },
           { data: 'confirmationmail',
@@ -215,62 +241,76 @@
       ]
       
       });
-
+      var rowData
       $('#list_table_json tbody').on( 'click', '.confirm', function () {
-        var data = table.row( $(this).parents('tr') ).data();
-        //alert( data["id"] );
         
-        if (data['dateprioThun'] == 1) {
-          $("#prioConfirm").append('<button type="button" class="btn btn-primary">Samstag, 25.1.19, Thun</button>');
+        rowData = table.row( $(this).parents('tr') ).data();
+        //alert( data["id"] );
+
+        $('#prioConfirm').children('button').each(function() {
+            $(this).remove();
+          }
+        );
+
+        $('#altConfirm').children('button').each(function() {
+            $(this).remove();
+         }
+        );
+
+        if (rowData['dateprioThun'] == 1) {
+          $("#prioConfirm").append('<button id="prioThun" type="button" class="btn btn-primary confirmBtn">Samstag, 25.1.19, Thun</button>');
         }
-        if (data['dateprioWintherthur'] == 1) {
-          $("#prioConfirm").append('<button type="button" class="btn btn-primary">Samstag, 25.1.19, Winterthur</button>');
+        if (rowData['dateprioWintherthur'] == 1) {
+          $("#prioConfirm").append('<button id="prioWinterthur" type="button" class="btn btn-primary confirmBtn">Samstag, 25.1.19, Winterthur</button>');
         }
-        if (data['dateprioZofingen'] == 1) {
-          $("#prioConfirm").append('<button type="button" class="btn btn-primary">Samstag, 11.1.19, Zofingen</button>');
+        if (rowData['dateprioZofingen'] == 1) {
+          $("#prioConfirm").append('<button id="prioZofingen" type="button" class="btn btn-primary confirmBtn">Samstag, 11.1.19, Zofingen</button>');
         }
 
-        if (data['datealtThun'] == 1) {
-          $("#altConfirm").append('<button type="button" class="btn btn-primary" data="datealtThun">Samstag, 25.1.19, Thun</button></br>');
+        if (rowData['datealtThun'] == 1) {
+          $("#altConfirm").append('<button id="altThun" type="button" class="btn btn-primary confirmBtn" data="datealtThun">Samstag, 25.1.19, Thun</button>');
         }
-        if (data['datealtWinterthur'] == 1) {
-          $("#altConfirm").append('<button type="button" class="btn btn-primary" data="datealtWinterthur">Samstag, 25.1.19, Winterthur</button></br>');
+        if (rowData['datealtWinterthur'] == 1) {
+          $("#altConfirm").append('<button id="altWinterthur" type="button" class="btn btn-primary confirmBtn" data="datealtWinterthur">Samstag, 25.1.19, Winterthur</button>');
         }
-        if (data['datealtZofingen'] == 1) {
-          $("#altConfirm").append('<button type="button" class="btn btn-primary" data="datealtZofingen">Samstag, 11.1.19, Zofingen</button></br>');
+        if (rowData['datealtZofingen'] == 1) {
+          $("#altConfirm").append('<button id="altZofingen" type="button" class="btn btn-primary confirmBtn" data="datealtZofingen">Samstag, 11.1.19, Zofingen</button>');
         }
         
         $('#confirmModal').modal('show');
+        $(this).replaceWith('<img class="loading-small" src="../../Rolling-1s-200px.svg" />');
         
-        //$(this).replaceWith('<img class="loading-small" src="../../Rolling-1s-200px.svg" />');
+        
 
+      });
 
+      $('#confirmModal').on( 'click', '.confirmBtn', function () {
+        
+        $('#confirmModal').modal('hide');
+        vConfirmDate = $(this).prop('id');
 
         $.ajax({
         type: "POST",
-        url: '',
-        data: {id: data['id']},    
+        url: 'exec-confirmationmail.php',
+        data: {id: rowData['id'], confirmDate: vConfirmDate},    
         timeout: 5000,
         error: function(jqXHR, textStatus, errorThrown) {
           $('.loading-small').replaceWith('<button class="btn btn-small btn-danger" disabled><span class="glyphicon glyphicon-exclamation-sign" ></span> Fehler</button>');
-          //console.log(jqXHR);
-          //console.log(textStatus);
-          //console.log(errorThrown);
+          console.log(jqXHR);
+          console.log(textStatus);
+          console.log(errorThrown);
         },
         success: function (data){
+          
           if(data == "1"){
-            //$('.loading-small').replaceWith('<button class="btn btn-small btn-default" disabled><span class="glyphicon glyphicon-ok" ></span> Bestätigt</button>');
+            $('.loading-small').replaceWith('<button class="btn btn-small btn-default" disabled><span class="glyphicon glyphicon-ok" ></span> Bestätigt</button>');
           }else{
-            //$('.loading-small').replaceWith('<button class="btn btn-small btn-danger" disabled><span class="glyphicon glyphicon-exclamation-sign" ></span> Fehler</button>');
+            $('.loading-small').replaceWith('<button class="btn btn-small btn-danger" disabled><span class="glyphicon glyphicon-exclamation-sign" ></span> Fehler</button>');
           }
+
+          setTimeout("refresh()", 1000);
           //console.log(data);
         } 
-      });
-
-       
-        
-
-
     } );
 
      
@@ -279,43 +319,10 @@
         refresh();
       }, 30000 );
       refresh();
-      function refresh() {
+
       
-      $.ajax({
-        url: "serve-table-content.php",
-        dataType: 'json',
-        type: 'get',
-        cache:false,
-        success: function(data){
-          /*console.log(data);*/
-          var event_data = '';
-          var lunchcount = 0;
-          var frcount = 0;
-          var decount = 0;
-          $.each(data, function(index, value){
-              if (value.lunch == true) {
-                  lunchcount++;
-              }
-              if ((value.lang == "de") || (value.lang == "de-CH") || (value.lang == "de-DE")) {
-                decount++;
-              }
-              if ((value.lang == "fr") || (value.lang == "fr-CH") || (value.lang == "fr-FR")) {
-                frcount++;
-              }
-          });
-          $('#peoble-count').text(data.length);
-          $('#lunch-count').text(lunchcount);
-          $('#de-count').text(decount);
-          $('#fr-count').text(frcount);
-        },
-        error: function(d){
-            /*console.log("error");
-            alert("404. Please wait until the File is Loaded.");*/
-            $("#list_table_json").replaceWith('<p>Du bist nicht eingeloggt</p></p><a href="admin.php"><button class="btn btn-primary">Einloggen</button></a>');
-        }
-    });
-  };
   });
+});
 
   </script>
 </body>

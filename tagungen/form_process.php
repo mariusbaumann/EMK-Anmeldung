@@ -93,7 +93,7 @@ $secretKey = "6Lc0hLQUAAAAAMYxzJAo_ODi07k11oT83C8iCi5t";
         }
 
 if($verfiedcapcha){
-    $sql="INSERT INTO contact_form_information_events (firstname, lastname, district, role, eMail, dateprioThun, dateprioWintherthur, dateprioZofingen, datealtThun, datealtWinterthur, datealtZofingen, vegi, allergies, detectedLang) VALUES ('".$firstname."','".$lastname."', '".$district."', '".$role."', '".$eMail."', '".$dateprioThun."', '".$dateprioWintherthur."', '".$dateprioZofingen."', '".$datealtThun."', '".$datealtWinterthur."', '".$datealtZofingen."', '".$vegi."', '".$allergies."', '".$detectedLang."')";
+    $sql="INSERT INTO contact_form_information_events (firstname, lastname, district, role, eMail, dateprioThun, dateprioWintherthur, dateprioZofingen, datealtThun, datealtWinterthur, datealtZofingen, vegi, allergies, detectedLang, Status) VALUES ('".$firstname."','".$lastname."', '".$district."', '".$role."', '".$eMail."', '".$dateprioThun."', '".$dateprioWintherthur."', '".$dateprioZofingen."', '".$datealtThun."', '".$datealtWinterthur."', '".$datealtZofingen."', '".$vegi."', '".$allergies."', '".$detectedLang."', 'Neu' )";
     if(!$result = $conn->query($sql)){
     die('There was an error running the query [' . $conn->error . ']');
     }
