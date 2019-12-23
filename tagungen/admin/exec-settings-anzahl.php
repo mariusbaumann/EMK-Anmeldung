@@ -14,10 +14,11 @@ require_once('../config.php');
 $query = $conn->query("SELECT * FROM `settings`");
 $myArray = array();
 if ($result = $query) {
+    
     while($row = $result->fetch_array(MYSQLI_ASSOC)) {
             $myArray[] = $row;
     }
-    print_r($myArray);
+    echo json_encode($myArray);
 }
 
 

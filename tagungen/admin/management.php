@@ -28,22 +28,24 @@
       <img style="height: 60px" src="../../logo.jpg" />
     </div>
     <div class="col-3">
-    <label id="district" for="Name">Thun 100</label>
+    <label id="labelStatThun" for="Name">Thun <span class="badge badge-primary">100</span></label>
       <div class="progress">
-        <div class="progress-bar" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">50</div>
-        <div class="progress-bar bg-success" role="progressbar" style="width: 40%" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100">40</div>
+        <div id="progThunBe" class="progress-bar" role="progressbar"  aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+        <div id="progThunUn" class="progress-bar bg-success" role="progressbar"  aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
       </div>
     </div>
     <div class="col-3">
-    <label id="district" for="Name">Winterthur</label>
+    <label id="labelStatWinterthur" for="Name">Winterthur <span class="badge badge-primary">100</span></label>
       <div class="progress">
-        <div class="progress-bar" role="progressbar" style="width: 25%;" aria-valuenow="30" aria-valuemin="0" aria-valuemax="80">30/80</div>
+        <div id="progWinterthurBe" class="progress-bar" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="80"></div>
+        <div id="progWinterthurUn" class="progress-bar bg-success" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
       </div>
     </div>
     <div class="col-3">
-    <label id="district" for="Name">Zofingen</label>
+    <label id="labelStatZofingen" for="Name">Zofingen <span class="badge badge-primary">100</span></label>
       <div class="progress">
-        <div class="progress-bar" role="progressbar" style="width: 70%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">70/100</div>
+        <div id="progZofingenBe" class="progress-bar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+        <div id="progZofingenUn" class="progress-bar bg-success" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
       </div>
     </div>
   </div>
@@ -53,6 +55,9 @@
   <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#capacitySettingsModal">
   Platzzahl Einstellungen
   </button>
+  <div id="spinner" class="spinner-border"  role="status">
+  <span class="sr-only">Loading...</span>
+</div>
   <hr>
   <!-- Modal Platzzahl-->
   <div class="modal fade" id="capacitySettingsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -68,11 +73,11 @@
           <div class="row">
             <div id="" class="col">
               <label id="district" for="Name">Platzzahl Thun</label>
-              <input type="text" class="form-control" name="district" placeholder="" >
+              <input id="fieldMaxThun" type="text" class="form-control" name="district" placeholder="" >
               <label id="district" for="Name">Platzzahl Winterthur</label>
-              <input type="text" class="form-control" name="district" placeholder="" >
+              <input id="fieldMaxWinterthur" type="text" class="form-control" name="district" placeholder="" >
               <label id="district" for="Name">Platzzahl Zofingen</label>
-              <input type="text" class="form-control" name="district" placeholder="" >
+              <input id="fieldMaxZofingen" type="text" class="form-control" name="district" placeholder="" >
               <hr>
               <p>Durch die Einstellung der Platzzahlen wird die Kapazitätsanzeige angepasst</p>
             </div>
@@ -80,7 +85,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">schliessen</button>
-          <button type="button" class="btn btn-primary">Speichern</button>
+          <button id="" type="button" class="btn btn-primary saveMaxCapacity">Speichern</button>
         </div>
       </div>
     </div>
@@ -134,9 +139,8 @@
               <p>Priorität bestätigen:</p>
             </div>
           </div>
-        </div>
-        <div class="row">
-          <div id="altConfirm" class="col">
+          <div class="row">
+           <div id="altConfirm" class="col">
             <p>Umbuchen auf:</p>
               <!--<button type="button" class="btn btn-primary">xxxx</button>-->
           </div>
@@ -144,6 +148,7 @@
       </div>
     </div>
   </div>
+</div>
   <table id="list_table_json" class="table table-striped table-hover" >
     <div id="loading-img"><img class="img-center" src="Rolling-2s-200px.svg" /></div>
       <thead>
@@ -178,42 +183,10 @@
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
   <script>
-    function refresh() {
-      $.ajax({
-        url: "serve-table-content.php",
-        dataType: 'json',
-        type: 'get',
-        cache:false,
-        success: function(data){
-          /*console.log(data);*/
-          var event_data = '';
-          var lunchcount = 0;
-          var frcount = 0;
-          var decount = 0;
-          $.each(data, function(index, value){
-            if (value.lunch == true) {
-              lunchcount++;
-            }
-            if ((value.lang == "de") || (value.lang == "de-CH") || (value.lang == "de-DE")) {
-              decount++;
-            }
-            if ((value.lang == "fr") || (value.lang == "fr-CH") || (value.lang == "fr-FR")) {
-              frcount++;
-            }
-          });
-          $('#peoble-count').text(data.length);
-          $('#lunch-count').text(lunchcount);
-          $('#de-count').text(decount);
-          $('#fr-count').text(frcount);
-        },
-        error: function(d){
-          /*console.log("error");
-          alert("404. Please wait until the File is Loaded.");*/
-          $("#list_table_json").replaceWith('<p>Du bist nicht eingeloggt</p></p><a href="admin.php"><button class="btn btn-primary">Einloggen</button></a>');
-        }
-      });
-    };
-
+    var maxThun = 0;
+    var maxWinterthur = 0;
+    var maxZofingen = 0;
+    
     $(document).ready(function load(){
       var table = $('#list_table_json').DataTable( {
         "iDisplayLength": 20,
@@ -342,16 +315,154 @@
             $('.loading-small').replaceWith('<button class="btn btn-small btn-danger" disabled><span class="glyphicon glyphicon-exclamation-sign" ></span> Fehler</button>');
           }
 
-          setTimeout("refresh()", 1000);
+          setTimeout(refresh, 500);
           //console.log(data);
         } 
       });
-      setInterval( function () {
-        table.ajax.reload(null, false);
-        refresh();
-      }, 30000 );
-      refresh();
+    });
+
+    function refresh() {
+      $.ajax({
+        url: "exec-settings-anzahl.php",
+        dataType: 'json',
+        type: 'get',
+        cache:false,
+        success: function(data){
+          $.each(data, function(index, value){
+            if (value.Setting == "maxCapThun") {
+              maxThun = value.Value;
+            }
+            if (value.Setting == "maxCapWinterthur") {
+              maxWinterthur = value.Value;
+            }
+            if (value.Setting == "maxCapZofingen") {
+              maxZofingen = value.Value;
+            }
+          });
+          $("#labelStatThun").find('.badge').text(maxThun);
+          $("#fieldMaxThun").val(maxThun);
+          $("#labelStatWinterthur").find('.badge').text(maxWinterthur);
+          $("#fieldMaxWinterthur").val(maxWinterthur);
+          $("#labelStatZofingen").find('.badge').text(maxZofingen);
+          $("#fieldMaxZofingen").val(maxZofingen);
+        },
+        error: function(d){
+          /*console.log("error");
+          alert("404. Please wait until the File is Loaded.");*/
+          //$("#list_table_json").replaceWith('<p>Du bist nicht eingeloggt</p></p><a href="admin.php"><button class="btn btn-primary">Einloggen</button></a>');
+        }
+        
       });
+      $.ajax({
+        url: "serve-table-content.php",
+        dataType: 'json',
+        type: 'get',
+        cache:false,
+        success: function(data){
+          /*console.log(data);*/
+          var event_data = '';
+          var thunCountUn = 0;
+          var thunCountBe = 0;
+          var winterthurCountBe = 0;
+          var winterthurCountUn = 0;
+          var zofingenCountBe = 0;
+          var zofingenCountUn = 0;
+          var winterthurCount = 0;
+          var zofingenCount = 0;
+          $.each(data, function(index, value){
+            console.log(index, value);
+            if (value.dateprioThun == 1) {
+              if (value.Status != "Bestätigt" && value.Status != "Umgebucht"){
+              thunCountUn++;
+            }
+            }
+            if (value.confAtendenceLocation == "25.1.19 Thun"){
+              thunCountBe++;
+            }
+            if (value.dateprioWintherthur == 1) {
+              if (value.Status != "Bestätigt" && value.Status != "Umgebucht"){
+              winterthurCountUn++;
+              }
+            }
+            if (value.confAtendenceLocation == "25.1.19 Winterthur"){
+              winterthurCountBe++;
+            }
+            if (value.dateprioZofingen == 1) {
+              if (value.Status != "Bestätigt" && value.Status != "Umgebucht"){
+              zofingenCountUn++;
+              }
+            }
+              if (value.confAtendenceLocation == "11.1.19 Zofingen"){
+              zofingenCountBe++;
+            }
+            
+          });
+          console.log(thunCountUn);
+          console.log(thunCountBe);
+          console.log("W" + winterthurCountUn);
+          console.log("W" + winterthurCountBe);
+          
+
+          $('#progThunBe').text(thunCountBe);
+          var percentThunBe = (100/maxThun*thunCountBe) + '%';
+          $('#progThunBe').css("width", String(percentThunBe));
+          $('#progThunUn').text(thunCountUn);
+          var percentThunUn = (100/maxThun*thunCountUn) + '%';
+          $('#progThunUn').css("width", String(percentThunUn));
+
+          $('#progWinterthurBe').text(winterthurCountBe);
+          var percentWinterthurBe = (100/maxWinterthur*winterthurCountBe) + '%';
+          $('#progWinterthurBe').css("width", String(percentWinterthurBe));
+          $('#progWinterthurUn').text(winterthurCountUn);
+          var percentWinterthurUn = (100/maxWinterthur*winterthurCountUn) + '%';
+          $('#progWinterthurUn').css("width", String(percentWinterthurUn));
+
+          $('#progZofingenBe').text(zofingenCountBe);
+          var percentZofingenBe = (100/maxZofingen*zofingenCountBe) + '%';
+          $('#progZofingenBe').css("width", String(percentZofingenBe));
+          $('#progZofingenUn').text(zofingenCountUn);
+          var percentZofingenUn = (100/maxZofingen*zofingenCountUn) + '%';
+          $('#progZofingenUn').css("width", String(percentZofingenUn));
+
+        },
+        error: function(d){
+          /*console.log("error");
+          alert("404. Please wait until the File is Loaded.");*/
+          $("#list_table_json").replaceWith('<p>Du bist nicht eingeloggt</p></p><a href="admin.php"><button class="btn btn-primary">Einloggen</button></a>');
+        }
+      });
+
+      //$('#list_table_json').DataTable().ajax.reload();
+      
+      $('#spinner').hide();
+      table.ajax.reload(null, false);
+    };
+
+    $('#capacitySettingsModal').on('click', '.saveMaxCapacity', function () {
+      console.log("fu");
+      
+      $.post("save-capacity.php",
+      {
+        maxCapThun: $('#fieldMaxThun').val(),
+        maxCapWinterthur: $('#fieldMaxWinterthur').val(),
+        maxCapZofingen: $('#fieldMaxWinterthur').val()
+      },
+      function(data, status){
+        console.log("Data: " + data + "\nStatus: " + status);
+      })
+      setTimeout(refresh, 500);
+
+      $('#capacitySettingsModal').modal('hide');
+      $('#spinner').show();
+
+      });
+
+
+
+    setInterval( function () {
+      refresh();
+    }, 30000 );
+    refresh();
     });
 
   </script>
