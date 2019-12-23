@@ -67,11 +67,12 @@
     h3 {
       margin-bottom: 40px;
     }
-    .container {
+    .container-fluid {
       margin-bottom: 40px;
+      padding-top: 20px;
     }
     .navbar-toggle {
-      display: none;
+      
     }
     .margin-bottom {
       margin-bottom: 10px;
